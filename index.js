@@ -2,15 +2,19 @@ import * as cheerio from "cheerio";
 import express from "express"
 import axios from "axios"
 
+let museumList = [{
+  name:'國美館',url:"https://www.ntmofa.gov.tw/activitysoonlist_1036.html"
+}]
+
 let port = 8700;
-let baseUrl = 'https://www.tfam.museum/Exhibition/Exhibition.aspx?ddlLang=zh-tw'
+let baseUrl = museumList[0].url
 let app = express();
 
 
 
 app.get('/', function(req, res) {
   const fetchData = async ()=>{
-    //存資料的db
+    //? 展覽的資料格式 －－參考公開資料
     let exhibitionInfo = {
       //名稱
       title:null,
@@ -35,14 +39,13 @@ app.get('/', function(req, res) {
     
     try{
           let response = await axios.get(baseUrl)
-          let $ = cheerio.load(response.data)
+          let $ = cheerio.load(response.data)          
+          let targetLinks = $('#exhibition-list').find('a')
+          console.log(target.length);
+          targetLinks.map((i,el)=>{
+            console.log(el);
+          })
           
-          //todo 用find('.text') 產生
-          console.log(123,$('.Exhibition_list').length);
-          // const listArr = $('#ExList').find('.Exhibition_list');
-          // listArr.map((i,el)=>{
-          //   console.log(123,i,el);
-          // })
     }catch(error){
         console.log('loading',error.message);
     }
