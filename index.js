@@ -15,36 +15,11 @@ let app = express();
 app.get('/', function(req, res) {
   const fetchData = async ()=>{
     //? 展覽的資料格式 －－參考公開資料
-    let exhibitionInfo = {
-      //名稱
-      title:null,
-      showUnit:null,
-      descriptionFilterHtml:null,
-      startDate: "2022/12/15",
-      endDate: null,
-      showInfo:[
-        {
-          //經緯度 for map
-          latitude: "24.157234",
-          longitude: "120.66606",
-          //展覽是否有售票
-          onSale:'Y',
-          //票價
-          price:''
-        }
-      ],
-      imageUrl:[],
-      hitRate:1955,
-    }
-    
     try{
           let response = await axios.get(baseUrl)
           let $ = cheerio.load(response.data)          
           let targetLinks = $('#exhibition-list').find('a')
-          let nameList = targetLinks.map((i,el)=>{
-
-            //todo 1.先爬完當頁的：展覽標題 / 展覽圖檔 / 展覽日期
-            //todo 2.如果有<a>存在，再發一次request 進去撈更多資料
+          let exhibitionList = targetLinks.map((i,el)=>{
             //檢測內部架構:
                     //parent
                     // prev
@@ -62,11 +37,44 @@ app.get('/', function(req, res) {
             for(let property in el){
               // console.log(property);
             }
-            //取得對應資料的名稱
-            console.log(el.prev);
             //todo 回傳資料格式參考公開api
-            return el.attribs.title
+            console.log(el.attribs.href);
+            return {
+            title:el.attribs.title,
+            //! 如何分類
+            type:null,
+            showUnit:null,
+            descriptionFilterHtml:null,
+            startDate: null,
+            endDate: null,
+            showInfo:[
+              {
+                //經緯度 for map
+                latitude: null,
+                longitude: null,
+                //展覽是否有售票
+                onSale:null,
+                //票價
+                price:null,
+                exhibitionInfo:el.attribs.href
+              }
+            ],
+            imageUrl:null,
+            hitRate:null,
+    }
           })
+          //? 根據不同展覽去loop取得對應資料
+          for(let loopTimes = 0;loopTimes<exhibitionList.length;loopTimes++){
+              let response = await axios.get(exhibitionList[loopTimes].showInfo[0].exhibitionInfo);
+              let exhibitionIntro = cheerio.load(response.data);
+              //抓展覽時間
+              exhibitionList[loopTimes].startDate = exhibitionIntro('.t_r').text()
+              //展覽內容
+              let exhibitionContent = exhibitionIntro('div.ckEdit').find('p')
+              console.log(exhibitionContent);
+              //todo 如何抓到這些p架構的內容
+          }
+          console.log('最終結果',exhibitionList[0]);
           
     }catch(error){
         console.log('loading',error.message);
