@@ -41,9 +41,31 @@ app.get('/', function(req, res) {
           let response = await axios.get(baseUrl)
           let $ = cheerio.load(response.data)          
           let targetLinks = $('#exhibition-list').find('a')
-          console.log(target.length);
-          targetLinks.map((i,el)=>{
-            console.log(el);
+          let nameList = targetLinks.map((i,el)=>{
+
+            //todo 1.先爬完當頁的：展覽標題 / 展覽圖檔 / 展覽日期
+            //todo 2.如果有<a>存在，再發一次request 進去撈更多資料
+            //檢測內部架構:
+                    //parent
+                    // prev
+                    // next
+                    // startIndex
+                    // endIndex
+                    // children
+                    // name
+                    // attribs
+                    // type
+                    // namespace
+                    // x-attribsNamespace
+                    // x-attribsPrefix
+
+            for(let property in el){
+              // console.log(property);
+            }
+            //取得對應資料的名稱
+            console.log(el.prev);
+            //todo 回傳資料格式參考公開api
+            return el.attribs.title
           })
           
     }catch(error){
