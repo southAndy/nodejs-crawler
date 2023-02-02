@@ -1,17 +1,22 @@
 import * as cheerio from "cheerio";
 import express from "express"
 import axios from "axios"
+import * as dotenv from "dotenv"
+dotenv.config()
 
-import getNtomfaInfo from "./crawler/ntomfa";
+
+
+// import getNtomfaInfo from "./crawler/ntomfa";
 
 let port = 8700;
-let baseUrl = museumList[0].url
+// let baseUrl = museumList[0].url
+console.log(process.env.NODE_ENV);
 let app = express();
 
 
 
 app.get('/', function(req, res) {
-  getNtomfaInfo()
+  // getNtomfaInfo()
   res.send('hello world');
 
   
