@@ -1,17 +1,18 @@
 import axios from "axios"
 import * as cheerio from "cheerio";
 
-const fetchData = async ()=>{
+const fetchData = async (url)=>{
     try{
-          console.log('excuting');
-          let response = await axios.get(baseUrl)
-          let $ = cheerio.load(response.data)          
+          //偽裝客戶端發請求
+          let response = await axios.get(url)
+          //利用這個請求的內容，透過.load()產生一個cheerio實例
+          let $ = cheerio.load(response.data)
           let targetLinks = $('#exhibition-list').find('a')
+          console.log('展覽超連結數量',targetLinks.length);
           let exhibitionList = targetLinks.map((i,el)=>{
             for(let property in el){
               // console.log(property);
             }
-            //todo 回傳資料格式參考公開api
             console.log(el.attribs.href);
             return {
             title:el.attribs.title,
@@ -48,7 +49,7 @@ const fetchData = async ()=>{
               console.log(exhibitionContent.text());
               exhibitionList[loopTimes].descriptionFilterHtml = exhibitionContent.text()
           }
-          console.log('最終結果',exhibitionList[0]);
+          console.log('最終結果',exhibitionList);
           
     }catch(error){
         console.log('loading',error.message);
