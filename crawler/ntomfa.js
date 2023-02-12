@@ -1,23 +1,9 @@
-export default fetchData = async ()=>{
+export  fetchData = async ()=>{
     try{
           let response = await axios.get(baseUrl)
           let $ = cheerio.load(response.data)          
           let targetLinks = $('#exhibition-list').find('a')
           let exhibitionList = targetLinks.map((i,el)=>{
-            //檢測內部架構:
-                    //parent
-                    // prev
-                    // next
-                    // startIndex
-                    // endIndex
-                    // children
-                    // name
-                    // attribs
-                    // type
-                    // namespace
-                    // x-attribsNamespace
-                    // x-attribsPrefix
-
             for(let property in el){
               // console.log(property);
             }

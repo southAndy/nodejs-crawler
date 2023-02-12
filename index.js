@@ -6,17 +6,17 @@ dotenv.config()
 
 
 
-// import getNtomfaInfo from "./crawler/ntomfa";
+import {fetchData} from "./crawler/ntomfa";
 
 let port = 8700;
 // let baseUrl = museumList[0].url
-console.log(process.env.NODE_ENV);
+console.log(process.env.USER_ID);
 let app = express();
 
 
 
 app.get('/', function(req, res) {
-  // getNtomfaInfo()
+  fetchData()
   res.send('hello world');
 
   
