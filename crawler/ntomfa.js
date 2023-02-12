@@ -1,5 +1,9 @@
-export  fetchData = async ()=>{
+import axios from "axios"
+import * as cheerio from "cheerio";
+
+const fetchData = async ()=>{
     try{
+          console.log('excuting');
           let response = await axios.get(baseUrl)
           let $ = cheerio.load(response.data)          
           let targetLinks = $('#exhibition-list').find('a')
@@ -50,3 +54,5 @@ export  fetchData = async ()=>{
         console.log('loading',error.message);
     }
 }
+
+export default fetchData

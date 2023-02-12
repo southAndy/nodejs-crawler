@@ -1,20 +1,16 @@
-import * as cheerio from "cheerio";
 import express from "express"
-import axios from "axios"
-import * as dotenv from "dotenv"
-dotenv.config()
+import fetchData from "./crawler/ntomfa.js";
 
+// import * as dotenv from "dotenv"
+// dotenv.config()
 
-
-import {fetchData} from "./crawler/ntomfa";
-
-let port = 8700;
-// let baseUrl = museumList[0].url
-console.log(process.env.USER_ID);
+//產生一個express的web-server
 let app = express();
 
+//對應的url
+let port = 8700;
 
-
+//對應url會觸發行為
 app.get('/', function(req, res) {
   fetchData()
   res.send('hello world');
